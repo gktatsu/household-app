@@ -9,6 +9,7 @@ provider:
     SUPABASE_URL: ${env:SUPABASE_URL}
     SUPABASE_SERVICE_KEY: ${env:SUPABASE_SERVICE_KEY}
     EXCHANGE_API_KEY: ${env:EXCHANGE_API_KEY}
+    FRONTEND_URL: ${env:FRONTEND_URL}
 
 functions:
   api:
@@ -18,7 +19,7 @@ functions:
           path: /{proxy+}
           method: ANY
           cors:
-            origin: '*'
+            origin: '*'  # Lambda側でもCORS設定
             headers:
               - Content-Type
               - Authorization
