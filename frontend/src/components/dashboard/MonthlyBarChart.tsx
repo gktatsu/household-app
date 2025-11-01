@@ -59,13 +59,25 @@ export const MonthlyBarChart: React.FC<MonthlyBarChartProps> = ({
     };
   });
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: Array<{
+      color: string;
+      name: string;
+      value: number;
+    }>;
+    label?: string;
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white px-4 py-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center justify-between gap-4">
+          {payload.map((entry) => (
+            <div key={entry.name} className="flex items-center justify-between gap-4">
               <span className="text-sm" style={{ color: entry.color }}>
                 {entry.name}:
               </span>

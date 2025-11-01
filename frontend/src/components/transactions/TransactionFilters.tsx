@@ -1,16 +1,11 @@
 import React from 'react';
 import { Category } from '../../types';
 import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import type { TransactionFilters as TransactionFilterParams } from '../../services/api';
 
 interface TransactionFiltersProps {
-  filters: {
-    startDate: string;
-    endDate: string;
-    type: string;
-    category: string;
-    currency: string;
-  };
-  setFilters: React.Dispatch<React.SetStateAction<any>>;
+  filters: TransactionFilterParams;
+  setFilters: React.Dispatch<React.SetStateAction<TransactionFilterParams>>;
   categories: Category[];
 }
 
@@ -32,11 +27,11 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
   };
 
   const hasActiveFilters = 
-    filters.startDate || 
-    filters.endDate || 
-    filters.type || 
-    filters.category || 
-    filters.currency;
+  filters.startDate || 
+  filters.endDate || 
+  filters.type || 
+  filters.category || 
+  filters.currency;
 
   return (
     <div className="bg-white rounded-lg shadow mb-6">
@@ -76,7 +71,7 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
               </label>
               <input
                 type="date"
-                value={filters.startDate}
+                value={filters.startDate ?? ''}
                 onChange={(e) =>
                   setFilters({ ...filters, startDate: e.target.value })
                 }
@@ -91,7 +86,7 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
               </label>
               <input
                 type="date"
-                value={filters.endDate}
+                value={filters.endDate ?? ''}
                 onChange={(e) =>
                   setFilters({ ...filters, endDate: e.target.value })
                 }
@@ -105,8 +100,13 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
                 タイプ
               </label>
               <select
-                value={filters.type}
-                onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+                value={filters.type ?? ''}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    type: e.target.value as TransactionFilterParams['type'],
+                  })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               >
                 <option value="">すべて</option>
@@ -121,7 +121,7 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
                 カテゴリ
               </label>
               <select
-                value={filters.category}
+                value={filters.category ?? ''}
                 onChange={(e) =>
                   setFilters({ ...filters, category: e.target.value })
                 }
@@ -142,9 +142,12 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
                 通貨
               </label>
               <select
-                value={filters.currency}
+                value={filters.currency ?? ''}
                 onChange={(e) =>
-                  setFilters({ ...filters, currency: e.target.value })
+                  setFilters({
+                    ...filters,
+                    currency: e.target.value as TransactionFilterParams['currency'],
+                  })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               >

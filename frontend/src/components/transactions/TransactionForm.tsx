@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import { createTransaction, updateTransaction } from '../../services/api';
 import { Category, Transaction } from '../../types';
 import toast from 'react-hot-toast';
@@ -44,8 +44,9 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // カテゴリをtypeでフィルタリング
-  const filteredCategories = categories.filter(
-    (cat) => cat.type === formData.type
+  const filteredCategories = useMemo(
+    () => categories.filter((cat) => cat.type === formData.type),
+    [categories, formData.type]
   );
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     if (!filteredCategories.find((cat) => String(cat.id) === formData.category_id)) {
       setFormData((prev) => ({ ...prev, category_id: '' }));
     }
-  }, [formData.type, filteredCategories]);
+  }, [filteredCategories, formData.category_id]);
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -129,8 +130,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
       }
 
       onSuccess();
-    } catch (error: any) {
-      toast.error(error.message || '取引の保存に失敗しました');
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : '取引の保存に失敗しました';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

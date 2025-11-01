@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRightOnRectangleIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
       await signOut();
       toast.success('ログアウトしました');
       navigate('/login');
-    } catch (error: any) {
+    } catch {
       toast.error('ログアウトに失敗しました');
     }
   };

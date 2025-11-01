@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
 export const Login: React.FC = () => {
@@ -18,8 +18,12 @@ export const Login: React.FC = () => {
       await signIn(email, password);
       toast.success('ログインしました');
       navigate('/dashboard');
-    } catch (error: any) {
-      toast.error(error.message || 'ログインに失敗しました');
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'ログインに失敗しました';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -28,8 +32,12 @@ export const Login: React.FC = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-    } catch (error: any) {
-      toast.error(error.message || 'Googleログインに失敗しました');
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Googleログインに失敗しました';
+      toast.error(message);
     }
   };
 

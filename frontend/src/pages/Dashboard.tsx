@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { getTransactions, getCategories } from '../services/api';
 import { Transaction, Category } from '../types';
 import { useExchangeRates } from '../hooks/useExchangeRates';
@@ -23,11 +23,7 @@ export const Dashboard: React.FC = () => {
   const startDate = format(startOfMonth(new Date()), 'yyyy-MM-dd');
   const endDate = format(endOfMonth(new Date()), 'yyyy-MM-dd');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const token = session?.access_token;
@@ -40,12 +36,16 @@ export const Dashboard: React.FC = () => {
 
       setTransactions(transactionsData);
       setCategories(categoriesData);
-    } catch (error) {
+    } catch {
       toast.error('データの取得に失敗しました');
     } finally {
       setLoading(false);
     }
-  };
+  }, [endDate, session?.access_token, startDate]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // 通貨変換して集計
   const convertedTransactions = transactions.map((t) => ({
@@ -76,7 +76,7 @@ export const Dashboard: React.FC = () => {
     try {
       await refreshRates();
       toast.success('為替レートを更新しました');
-    } catch (error) {
+    } catch {
       toast.error('為替レートの更新に失敗しました');
     }
   };

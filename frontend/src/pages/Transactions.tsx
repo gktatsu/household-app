@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { getTransactions, deleteTransaction, getCategories } from '../services/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import {
+  getTransactions,
+  deleteTransaction,
+  getCategories,
+  type TransactionFilters as TransactionFilterParams,
+} from '../services/api';
 import { Transaction, Category } from '../types';
 import { TransactionForm } from '../components/transactions/TransactionForm';
 import { TransactionList } from '../components/transactions/TransactionList';
@@ -22,7 +27,7 @@ export const Transactions: React.FC = () => {
   const [displayCurrency, setDisplayCurrency] = useState<string>('JPY');
 
   // フィルタ状態
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<TransactionFilterParams>({
     startDate: '',
     endDate: '',
     type: '',
@@ -30,15 +35,7 @@ export const Transactions: React.FC = () => {
     currency: '',
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchTransactions();
-  }, [filters]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const token = session?.access_token;
       if (!token) return;
@@ -49,9 +46,9 @@ export const Transactions: React.FC = () => {
       console.error('Failed to fetch categories:', error);
       toast.error('カテゴリの取得に失敗しました');
     }
-  };
+  }, [session?.access_token]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       setLoading(true);
       const token = session?.access_token;
@@ -59,12 +56,20 @@ export const Transactions: React.FC = () => {
 
       const data = await getTransactions(filters, token);
       setTransactions(data);
-    } catch (error) {
+    } catch {
       toast.error('取引の取得に失敗しました');
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, session?.access_token]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('この取引を削除してもよろしいですか？')) {
@@ -78,7 +83,7 @@ export const Transactions: React.FC = () => {
       await deleteTransaction(id, token);
       toast.success('取引を削除しました');
       fetchTransactions();
-    } catch (error) {
+    } catch {
       toast.error('取引の削除に失敗しました');
     }
   };

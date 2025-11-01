@@ -1,5 +1,13 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+  type PieLabelRenderProps,
+} from 'recharts';
 import { Category } from '../../types';
 import { formatCurrency } from '../../utils/formatCurrency';
 
@@ -15,7 +23,7 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
   categories,
 }) => {
   const chartData = Object.entries(data)
-    .filter(([_, value]) => value > 0)
+    .filter(([, value]) => value > 0)
     .map(([name, value]) => ({
       name,
       value,
@@ -23,7 +31,13 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
     }))
     .sort((a, b) => b.value - a.value);
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{ name: string; value: number }>;
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white px-4 py-2 border border-gray-200 rounded-lg shadow-lg">
@@ -40,31 +54,38 @@ export const CategoryPieChart: React.FC<CategoryPieChartProps> = ({
     return null;
   };
 
-  const renderCustomLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }: any) => {
+  const renderCustomLabel = (props: PieLabelRenderProps) => {
+    const {
+      cx = 0,
+      cy = 0,
+      midAngle = 0,
+      innerRadius = 0,
+      outerRadius = 0,
+      percent = 0,
+    } = props;
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const numericInnerRadius = Number(innerRadius);
+    const numericOuterRadius = Number(outerRadius);
+    const radius = numericInnerRadius + (numericOuterRadius - numericInnerRadius) * 0.5;
+    const midAngleValue = typeof midAngle === 'number' ? midAngle : Number(midAngle);
+    const percentValue = typeof percent === 'number' ? percent : Number(percent);
+    const cxNumber = Number(cx);
+    const cyNumber = Number(cy);
+    const x = cxNumber + radius * Math.cos(-midAngleValue * RADIAN);
+    const y = cyNumber + radius * Math.sin(-midAngleValue * RADIAN);
 
-    if (percent < 0.05) return null;
+    if (percentValue < 0.05) return null;
 
     return (
       <text
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
+  textAnchor={x > cxNumber ? 'start' : 'end'}
         dominantBaseline="central"
         className="text-sm font-semibold"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+  {`${(percentValue * 100).toFixed(0)}%`}
       </text>
     );
   };
