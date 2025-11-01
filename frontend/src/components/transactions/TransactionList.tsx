@@ -62,17 +62,17 @@ export const TransactionList: React.FC<TransactionListProps> = ({
       {Object.entries(groupedTransactions)
         .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
         .map(([date, items]) => (
-          <div key={date} className="bg-white rounded-lg shadow overflow-hidden">
+            <div key={date} className="bg-white rounded-lg shadow overflow-hidden">
             {/* 日付ヘッダー */}
             <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-              <h3 className="text-sm font-medium text-gray-700">
+                <h3 className="text-sm font-medium text-gray-700">
                 {format(new Date(date), 'yyyy年M月d日(E)', { locale: ja })}
-              </h3>
+                </h3>
             </div>
 
             {/* 取引リスト */}
             <div className="divide-y divide-gray-200">
-              {items.map((transaction) => (
+                {(items as Transaction[]).map((transaction) => (
                 <div
                   key={transaction.id}
                   className="px-6 py-4 hover:bg-gray-50 transition-colors"
