@@ -1,16 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  HomeIcon,
-  BanknotesIcon,
-} from '@heroicons/react/24/outline';
+import { navItems } from './navItems';
 
 export const Sidebar: React.FC = () => {
-  const navItems = [
-    { to: '/dashboard', icon: HomeIcon, label: 'ダッシュボード' },
-    { to: '/transactions', icon: BanknotesIcon, label: '取引履歴' },
-  ];
-
   return (
     <aside className="hidden lg:block w-64 bg-white shadow-sm h-[calc(100vh-73px)] fixed">
       <nav className="p-4 space-y-2">
