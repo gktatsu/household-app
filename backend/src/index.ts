@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { authenticateUser } from './middleware/auth';
 import * as transactionsController from './controllers/transactions';
 import * as categoriesController from './controllers/categories';
+import * as exchangeRatesController from './controllers/exchangeRates';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.put('/api/transactions/:id', authenticateUser, transactionsController.update
 app.delete('/api/transactions/:id', authenticateUser, transactionsController.deleteTransaction);
 
 app.get('/api/categories', authenticateUser, categoriesController.getCategories);
+app.get('/api/exchange-rates', exchangeRatesController.getExchangeRatesController);
 
 // Error handling
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
