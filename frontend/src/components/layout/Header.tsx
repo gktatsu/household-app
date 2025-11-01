@@ -1,26 +1,17 @@
 import React from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 import { ArrowRightOnRectangleIcon, Bars3Icon } from '@heroicons/react/24/outline';
-import toast from 'react-hot-toast';
 
 type HeaderProps = {
   onToggleMobileNav: () => void;
+  onSignOut: () => Promise<void> | void;
+  userEmail?: string | null;
 };
 
-export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      toast.success('ログアウトしました');
-      navigate('/login');
-    } catch {
-      toast.error('ログアウトに失敗しました');
-    }
-  };
+export const Header: React.FC<HeaderProps> = ({
+  onToggleMobileNav,
+  onSignOut,
+  userEmail,
+}) => {
 
   return (
     <header className="bg-white shadow-sm">
@@ -38,10 +29,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileNav }) => {
             Multi-Currency Household
           </h1>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">{user?.email}</span>
+        <div className="hidden lg:flex items-center gap-4">
+          {userEmail && (
+            <span className="text-sm text-gray-600">{userEmail}</span>
+          )}
           <button
-            onClick={handleSignOut}
+            onClick={() => void onSignOut()}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-gray-900"
           >
             <ArrowRightOnRectangleIcon className="w-5 h-5" />

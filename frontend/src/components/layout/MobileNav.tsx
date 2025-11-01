@@ -1,15 +1,23 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowRightOnRectangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { navItems, type NavItem } from './navItems';
 
 type MobileNavProps = {
   isOpen: boolean;
   onClose: () => void;
   items?: NavItem[];
+  userEmail?: string | null;
+  onSignOut: () => Promise<void> | void;
 };
 
-export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, items = navItems }) => {
+export const MobileNav: React.FC<MobileNavProps> = ({
+  isOpen,
+  onClose,
+  items = navItems,
+  userEmail,
+  onSignOut,
+}) => {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -71,6 +79,22 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, items = n
             </NavLink>
           ))}
         </nav>
+        <div className="px-4 pb-4 pt-2 border-t border-gray-100 space-y-3">
+          {userEmail && (
+            <p className="text-xs text-gray-500">{userEmail}</p>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              void onSignOut();
+            }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-gray-900"
+          >
+            <ArrowRightOnRectangleIcon className="w-5 h-5" />
+            ログアウト
+          </button>
+        </div>
       </div>
     </div>
   );
