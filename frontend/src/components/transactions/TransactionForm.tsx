@@ -36,7 +36,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     type: transaction?.type || 'expense',
     amount: transaction?.amount?.toString() || '',
     currency: transaction?.currency || 'JPY',
-    category_id: transaction?.category_id || '',
+    category_id: transaction?.category_id ? String(transaction.category_id) : '',
     description: transaction?.description || '',
     date: transaction?.date || new Date().toISOString().split('T')[0],
   });
@@ -50,7 +50,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
 
   useEffect(() => {
     // typeが変わったらcategory_idをリセット
-    if (!filteredCategories.find((cat) => cat.id === formData.category_id)) {
+    if (!filteredCategories.find((cat) => String(cat.id) === formData.category_id)) {
       setFormData((prev) => ({ ...prev, category_id: '' }));
     }
   }, [formData.type, filteredCategories]);
@@ -248,7 +248,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         >
           <option value="">カテゴリを選択</option>
           {filteredCategories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category.id} value={String(category.id)}>
               {category.icon} {category.name}
             </option>
           ))}
