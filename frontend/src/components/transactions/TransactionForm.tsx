@@ -11,6 +11,18 @@ interface TransactionFormProps {
   onCancel: () => void;
 }
 
+type TransactionType = 'income' | 'expense';
+type Currency = 'JPY' | 'USD' | 'EUR';
+
+interface FormData {
+  type: TransactionType;
+  amount: string;
+  currency: Currency;
+  category_id: string;
+  description: string;
+  date: string;
+}
+
 export const TransactionForm: React.FC<TransactionFormProps> = ({
   transaction,
   categories,
@@ -20,7 +32,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
   const { session } = useAuth();
   const [loading, setLoading] = useState(false);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     type: transaction?.type || 'expense',
     amount: transaction?.amount?.toString() || '',
     currency: transaction?.currency || 'JPY',
@@ -124,6 +136,31 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     }
   };
 
+  const handleTypeChange = (type: TransactionType) => {
+    setFormData({ ...formData, type });
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, amount: e.target.value });
+  };
+
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const currency = e.target.value as Currency;
+    setFormData({ ...formData, currency });
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, category_id: e.target.value });
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, date: e.target.value });
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, description: e.target.value });
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* 取引タイプ */}
@@ -134,7 +171,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         <div className="flex gap-4">
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, type: 'expense' })}
+            onClick={() => handleTypeChange('expense')}
             className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
               formData.type === 'expense'
                 ? 'bg-expense text-white'
@@ -145,7 +182,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setFormData({ ...formData, type: 'income' })}
+            onClick={() => handleTypeChange('income')}
             className={`flex-1 py-3 px-4 rounded-lg font-medium transition-colors ${
               formData.type === 'income'
                 ? 'bg-income text-white'
@@ -168,7 +205,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             type="number"
             step={formData.currency === 'JPY' ? '1' : '0.01'}
             value={formData.amount}
-            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+            onChange={handleAmountChange}
             className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
               errors.amount ? 'border-red-500' : 'border-gray-300'
             }`}
@@ -186,7 +223,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           <select
             id="currency"
             value={formData.currency}
-            onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+            onChange={handleCurrencyChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
             <option value="JPY">JPY (¥)</option>
@@ -204,7 +241,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         <select
           id="category"
           value={formData.category_id}
-          onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+          onChange={handleCategoryChange}
           className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
             errors.category_id ? 'border-red-500' : 'border-gray-300'
           }`}
@@ -230,7 +267,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           id="date"
           type="date"
           value={formData.date}
-          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+          onChange={handleDateChange}
           className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
             errors.date ? 'border-red-500' : 'border-gray-300'
           }`}
@@ -248,7 +285,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
         <textarea
           id="description"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={handleDescriptionChange}
           rows={3}
           maxLength={100}
           className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
