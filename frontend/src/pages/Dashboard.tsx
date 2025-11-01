@@ -13,7 +13,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 export const Dashboard: React.FC = () => {
   const { session } = useAuth();
-  const { rates, convertCurrency, lastUpdated, refreshRates, loading: ratesLoading } = useExchangeRates();
+  const { convertCurrency, lastUpdated, refreshRates, loading: ratesLoading } = useExchangeRates();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
