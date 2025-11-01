@@ -18,7 +18,8 @@
     "axios": "^1.13.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -29,7 +30,6 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.10",
     "serverless": "^4.22.0",
-    "serverless-http": "^4.0.0",
     "serverless-offline": "^14.4.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
