@@ -10,6 +10,16 @@ provider:
     SUPABASE_SERVICE_KEY: ${env:SUPABASE_SERVICE_KEY}
     EXCHANGE_API_KEY: ${env:EXCHANGE_API_KEY}
     FRONTEND_URL: ${env:FRONTEND_URL}
+    NODE_ENV: production
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: '*'
 
 functions:
   api:
