@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![App Screenshot](https://placehold.co/800x400/5ab18a/ffffff?text=Multi-Currency+Household+App)
+![App Screenshot](https://placehold.co/800x400/5ab18a/ffffff?text=Rate+Wallet+App)
 
 **複数通貨に対応した次世代家計簿アプリケーション**
 
@@ -481,31 +481,11 @@ Copyright (c) 2025 Your Name
 
 ---
 
-## 👤 作成者
+<!-- ## 👤 作成者 -->
 
-**Your Name**
+<!-- **Hotate** -->
 
-- 🌐 Portfolio: [your-portfolio.com](https://your-portfolio.com)
-- 💼 LinkedIn: [linkedin.com/in/yourname](https://linkedin.com/in/yourname)
-- 🐙 GitHub: [@yourusername](https://github.com/yourusername)
-- 📧 Email: your.email@example.com
-
----
-
-## 🙏 謝辞
-
-- [Supabase](https://supabase.com/) - 素晴らしいBaaSプラットフォーム
-- [Vercel](https://vercel.com/) - シームレスなデプロイ体験
-- [Exchangerate-API](https://www.exchangerate-api.com/) - 為替レートAPI
-- [Recharts](https://recharts.org/) - 美しいグラフライブラリ
-- [Heroicons](https://heroicons.com/) - アイコンセット
-
----
-
-<div align="center">
-
-**⭐ このプロジェクトが気に入ったら、Star をつけていただけると嬉しいです！**
-
-Made with ❤️ and ☕
-
-</div>
+<!-- - 🌐 Portfolio: [your-portfolio.com](https://your-portfolio.com) -->
+<!-- - 💼 LinkedIn: [linkedin.com/in/yourname](https://linkedin.com/in/yourname) -->
+<!-- - 🐙 GitHub: [@yourusername](https://github.com/yourusername) -->
+<!-- - 📧 Email: your.email@example.com -->
