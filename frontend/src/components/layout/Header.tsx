@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Bars3Icon className="w-6 h-6" />
           </button>
           <h1 className="text-xl font-bold text-primary-600">
-            Multi-Currency Household
+            Rate Wallet
           </h1>
         </div>
         <div className="hidden lg:flex items-center gap-4">
